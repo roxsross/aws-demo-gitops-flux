@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  build:
+    commands:
+      - echo "Build started on $(date)"
+      - echo "Scanning with Hadolint..."        
+      - result=`docker run --rm -i -v ${PWD}/hadolint.yml:/.hadolint.yaml public.ecr.aws/g9i7w2s3/hadolint hadolint -f json - < ${PWD}/Dockerfile`
+
+  post_build:
+    commands:
+      - echo "Lint Results:"
+      - echo $result | jq . >result-hadolint.json
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
+      - echo Build completed on `date`
+artifacts:
+  files: result-hadolint.json
