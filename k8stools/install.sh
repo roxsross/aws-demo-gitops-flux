@@ -3,7 +3,7 @@
 set -o pipefail
 
 export KUBECTL_VERSION='v1.25.4'
-export FLUX_VERSION='2.0.0'
+export FLUX_VERSION='2.1.0'
 
 # Check for and install dependencies
 install_dependencies() {
@@ -15,3 +15,5 @@ install_dependencies() {
 	./utility/install-awscli.sh
 	return $?
 }
+
+install_dependencies

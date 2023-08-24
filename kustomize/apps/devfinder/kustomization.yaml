@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: workshop
+resources:
+  - ../base
+  - deployment.yaml
+  - service.yaml
+  - image.yaml
+
+images:
+  - name: devfinder
+    newName: 459137896070.dkr.ecr.us-east-1.amazonaws.com/devfinder # {"$imagepolicy": "workshop:devfinder:name"}
+    newTag: main-2490678-9 # {"$imagepolicy": "workshop:devfinder:tag"}

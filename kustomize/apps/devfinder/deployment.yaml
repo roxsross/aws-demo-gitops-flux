@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/created-by: eks-workshop
     app.kubernetes.io/type: app
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: dev-finder
@@ -20,11 +21,14 @@ spec:
         app.kubernetes.io/created-by: eks-workshop
     spec:
       containers:
-      - name: dev-finder
-        image: roxsross12/dev-finder:1.0.1
+      - name: devfinder-app
+        image: devfinder
+        envFrom:
+          - configMapRef:
+              name: env-vars-base-config      
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: "50m"
         ports:
         - containerPort: 80

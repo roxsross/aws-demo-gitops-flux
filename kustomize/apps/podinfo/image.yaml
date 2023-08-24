@@ -1,0 +1,49 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: podinfo
+  namespace: workshop
+spec:
+  image: ghcr.io/stefanprodan/podinfo
+  interval: 5m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: podinfo
+  namespace: workshop
+spec:
+  imageRepositoryRef:
+    name: podinfo
+    namespace: workshop
+  policy:
+    semver:
+      range: 5.0.x
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: podinfo
+  namespace: workshop
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: roxs@github.com
+        name: roxs
+      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+    push:
+      branch: main
+  update:
+    strategy: Setters
+    path: .

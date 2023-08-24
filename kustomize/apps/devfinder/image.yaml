@@ -1,0 +1,54 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: devfinder
+  namespace: workshop
+spec:
+  secretRef:
+    name: ecr-credentials
+  image: 459137896070.dkr.ecr.us-east-1.amazonaws.com/devfinder
+  interval: 5m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: devfinder
+  namespace: workshop
+spec:
+  imageRepositoryRef:
+    name: devfinder
+    namespace: workshop
+  filterTags:
+    pattern: '^main-[a-fA-F0-9]+-(?P<buidnumber>.*)'
+    extract: '$buidnumber'
+  policy:
+    numerical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: devfinder
+  namespace: workshop
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: roxs@github.com
+        name: roxs
+      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+    push:
+      branch: main
+  update:
+    strategy: Setters
+    path: .
