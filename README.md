@@ -9,7 +9,7 @@ Con GitOps, se declara el estado deseado de los clústeres de Kubernetes en arch
 - Helm para implementar aplicaciones
 - Archivos de Kustomize para describir cambios específicos del entorno
 
-En este tutorial va a configurar una solución de CI/CD con GitOps con Flux v2
+En este tutorial se realizará la configuración de CI/CD con GitOps con Flux v2
 
 Siguiendo la documentación de la pagina oficial: https://fluxcd.io/flux/get-started/
 
