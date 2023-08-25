@@ -25,11 +25,13 @@ Build_1 : AWS CodeBuild busca un security_buildspec.yaml para revisar vulnerabil
 
 Build_2 : AWS CodeBuild busca un buildspec.yaml para compilar y envía nuestra aplicación de contenedor a Amazon Elastic Container Registry (Amazon ECR).
 
+![](./assets/codepipeline.png)
+
 Material en Repositorio:
 
 - Nuestras buildspec.yaml para revisión de vulnerabilidades con las tools [Horusec, Snyk, hadolint, trivy] y Contrucción de imagen Docker además push a ECR
 
-[buildspec.yam](./codebuild/resources/buildspec-build.yml)
+[buildspec](./codebuild/resources/buildspec-build.yml)
 
 - K8s Tools, Varias herramientas utiles para usar en Cloud9 o en un entorno local. 
     para instalar solo es necesario ./install.sh *recuerden darle permiso de ejecución*
